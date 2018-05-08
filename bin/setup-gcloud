@@ -14,12 +14,12 @@ function printHelp {
     echo ""
     echo "Options:"
     echo "  --project=<GCLOUD_PROJECT>        Give the project name."
-    echo "  --key=<GCLOUD_API_KEYFILE>    Give the service account as base64 encoded string."
-    echo "  --password=<FILE_PASSWORD>        Base64 encoded password (only for .p12 files)"
+    echo "  --key=<GCLOUD_API_KEYFILE>        Give the service account as base64 encoded string."
+    echo "  --password=<FILE_PASSWORD>        Password for the service account file (only for .p12 files)"
     echo "  --help                            Show this message"
+    echo " "
     exit 0
 }
-
 
 # Parse arguments.
 for var in "$@"
@@ -32,23 +32,21 @@ do
     esac
 done
 
-
-
 PASSWORD_OPTION=""
-if [ -z ${PASSWORD+x} ]; then
-    echo $PASSWORD | base64 --decode --ignore-garbage > /tmp/gcloud-password.json
-    PASSWORD_OPTION="--password-file /tmp/gcloud-password.json"
+if [ ! -z ${PASSWORD+x} ]; then
+    echo $PASSWORD > /tmp/gcloud-password.txt
+    PASSWORD_OPTION="--password-file /tmp/gcloud-password.txt"
 fi
 
-if [ -z ${GCLOUD_API_KEYFILE+x} ]; then
+if [ ! -z ${GCLOUD_API_KEYFILE+x} ]; then
+    echo "Authorizing with keyfile"
     echo $GCLOUD_API_KEYFILE | base64 --decode --ignore-garbage > /tmp/gcloud-api-key.json
     gcloud auth activate-service-account --key-file /tmp/gcloud-api-key.json $PASSWORD_OPTION
-    
-   
 fi
 
-if [ -z ${GCLOUD_PROJECT+x} ]; then
-    gcloud config set project $GCLOUD_PROJECT
+if [ ! -z ${GCLOUD_PROJECT+x} ]; then
+    echo "Setting up project to $GCLOUD_PROJECT"
+    gcloud config set core/project $GCLOUD_PROJECT
 fi
 
 echo "gcloud Activated"
