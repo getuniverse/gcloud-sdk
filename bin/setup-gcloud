@@ -1,0 +1,55 @@
+#!/bin/bash
+set -e
+
+function printHelp {
+    echo ""
+    echo ""
+    echo "gcloud CLI setup sript"
+    echo ""
+    echo "Provide the variables as parameters or have environment"
+    echo "variables GCLOUD_PROJECT and GCLOUD_API_KEYFILE available."
+    echo "See gcloud documentation: https://cloud.google.com/sdk/gcloud/reference/auth/activate-service-account."
+    echo ""
+    echo "Usage: setup-gcloud [options]"
+    echo ""
+    echo "Options:"
+    echo "  --project=<GCLOUD_PROJECT>        Give the project name."
+    echo "  --key=<GCLOUD_API_KEYFILE>    Give the service account as base64 encoded string."
+    echo "  --password=<FILE_PASSWORD>        Base64 encoded password (only for .p12 files)"
+    echo "  --help                            Show this message"
+    exit 0
+}
+
+
+# Parse arguments.
+for var in "$@"
+do
+    case "$var" in
+        --help) printHelp;;
+        --project=*) GCLOUD_PROJECT="${var#*=}";;
+        --key=*) GCLOUD_API_KEYFILE="${var#*=}";;
+        --password=*) PASSWORD="${var#*=}"
+    esac
+done
+
+
+
+PASSWORD_OPTION=""
+if [ -z ${PASSWORD+x} ]; then
+    echo $PASSWORD | base64 --decode --ignore-garbage > /tmp/gcloud-password.json
+    PASSWORD_OPTION="--password-file /tmp/gcloud-password.json"
+fi
+
+if [ -z ${GCLOUD_API_KEYFILE+x} ]; then
+    echo $GCLOUD_API_KEYFILE | base64 --decode --ignore-garbage > /tmp/gcloud-api-key.json
+    gcloud auth activate-service-account --key-file /tmp/gcloud-api-key.json $PASSWORD_OPTION
+    
+   
+fi
+
+if [ -z ${GCLOUD_PROJECT+x} ]; then
+    gcloud config set project $GCLOUD_PROJECT
+fi
+
+echo "gcloud Activated"
+gcloud config list
