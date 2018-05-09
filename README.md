@@ -32,4 +32,3 @@ variables. The value needs to be Base64 Encoded contents of the serviceaccoun ke
         - step:
             script:
               - setup-gcloud --project=my_project_name --key=$SERVICE_ACCOUNT
-
