@@ -1,7 +1,11 @@
 # Small utility docker image for gcloud sdk
 
+![Docker Build Status](https://img.shields.io/docker/build/getuniverse/gcloud-sdk.svg)
+
 Meant to be used in CI environments, allowing minimal gcloud configuration in the CI. 
-The image uses always the latest version of the `google/cloud-sdk:slim`.
+The image uses always the latest version of the [google/cloud-sdk:slim](https://hub.docker.com/r/google/cloud-sdk/).
+
+Docker Hub: https://hub.docker.com/r/getuniverse/gcloud-sdk/
 
 ## Utilities
 
