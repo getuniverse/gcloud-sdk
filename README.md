@@ -1,7 +1,7 @@
 # Small utility docker image for gcloud sdk
 
 Meant to be used in CI environments, allowing minimal gcloud configuration in the CI. 
-The image uses always the latest version of the gcloud with the slim
+The image uses always the latest version of the `google/cloud-sdk:slim`.
 
 ## Utilities
 
