@@ -26,7 +26,7 @@ The image uses always the latest version of the `google/cloud-sdk:slim`.
 Requires that `SERVICE_ACCOUNT` is defined as environment variable in Bitbucket Environment
 variables. The value needs to be Base64 Encoded contents of the serviceaccoun key file (json).
 
-    image: ristinolla/gcloud-sdk
+    image: getuniverse/gcloud-sdk
     pipelines:
       default:
         - step:
